@@ -8,7 +8,7 @@ public class PwValidatorTest {
     private PwValidator pwValidator = new PwValidator();
 
     @Test
-    public void validPwThreeConditionsMet() throws InterruptedException {
+    public void validPwThreeConditionsMet() {
         assertThat(pwValidator.isValid("a3456"), is(true));
         assertThat(pwValidator.isValid("a345678919"), is(true));
         assertThat(pwValidator.isValid("aAAAAAAAA"), is(true));

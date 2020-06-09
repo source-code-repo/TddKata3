@@ -10,7 +10,7 @@ public class PwValidator {
      *
      * Tests took 36s before optimisation, 20s after.
      */
-    public boolean isValid(String pw) throws InterruptedException {
+    public boolean isValid(String pw) {
         int conditionsMet = 0;
 
         if(pw != null) {
@@ -18,30 +18,36 @@ public class PwValidator {
         } else { // Can't continue if password is null
             throw new IllegalArgumentException("Null password");
         }
-        Thread.sleep(1000);
+        sleep();
 
         if(pw.chars().anyMatch(Character::isLowerCase)) {
             conditionsMet++;
         } else { // Lower case character required, exit early
             throw new IllegalArgumentException("Password must contain a lower case character");
         }
-        Thread.sleep(1000);
+        sleep();
 
         List<Function<String, Boolean>> checks = List.of(
                 p -> p.length() > 8,
                 p -> p.chars().anyMatch(Character::isUpperCase),
-                p -> p.chars().anyMatch(Character::isDigit)
-                );
-        for (Function<String, Boolean> check : checks) {
-            if (check.apply(pw)) {
+                p -> p.chars().anyMatch(Character::isDigit));
+        for (var c : checks) {
+            if (c.apply(pw)) {
                 conditionsMet++;
             }
-            Thread.sleep(1000);
-            if(conditionsMet == 3) {
+            sleep();
+            if (conditionsMet == 3) {
                 return true;
             }
         }
-
         throw new IllegalArgumentException("Three conditions must be met");
+    }
+
+    private void sleep() {
+        try {
+            Thread.sleep(1000);
+        } catch (InterruptedException e) {
+            throw new RuntimeException(e);
+        }
     }
 }
